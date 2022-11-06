@@ -5,8 +5,10 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+
     def __str__(self):
         return self.username
+
 
 class Card(models.Model):
     holder_name = models.CharField(max_length=50)
@@ -21,12 +23,14 @@ class Rider(models.Model):
     phone = models.CharField(max_length=20)
     address = models.CharField(max_length=200)
 
+
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=20)
     home_address = models.CharField(max_length=200)
     current_address = models.CharField(max_length=200)
-    driver_license = models.CharField(max_length = 10)
+    driver_license = models.CharField(max_length=10)
+
 
 class Ride(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
@@ -39,6 +43,7 @@ class Ride(models.Model):
     status = models.CharField(max_length=10)
     payment_method = models.CharField(max_length=10)
 
+
 class Review(models.Model):
     ride = models.ForeignKey(Ride, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -46,4 +51,3 @@ class Review(models.Model):
     review = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
