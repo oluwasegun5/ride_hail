@@ -8,12 +8,11 @@ from .serializers import *
 from auth_app.serializers import UserCreateSerializer
 from django.core.mail import send_mail
 from django.conf import settings
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework import permissions
 
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
-    permission_classes = [IsAdminUser]
 
     def create(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
@@ -33,6 +32,12 @@ class UserViewSet(ModelViewSet):
         if self.request.method == 'POST':
             return UserCreateSerializer
         return UserSerializer
+    
+    def get_permissions(self):
+        if self.request.method != 'POST':
+            return [permissions.IsAuthenticated()]
+        return [permissions.AllowAny()]
+            
 
 
 class RiderViewSet(ModelViewSet):
@@ -51,3 +56,11 @@ class DriverViewSet(ModelViewSet):
         if self.request.method == 'POST':
             return DriverCreateSerializer
         return DriverSerializer
+
+class ReviewViewSet(ModelViewSet):
+    queryset= Review.objects.all()
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return ReviewSerializer
+        return ReviewSerializer

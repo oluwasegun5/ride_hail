@@ -6,10 +6,10 @@ from .managers import CustomUserManager
 
 
 class User(AbstractUser):
-    username = None
+    # username = None
     email = models.EmailField(_('email address'), unique=True)
 
-    USERNAME_FIELD = 'email'
+    UserNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
@@ -54,7 +54,8 @@ class Ride(models.Model):
 
 class Review(models.Model):
     ride = models.ForeignKey(Ride, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
     rating = models.FloatField()
     review = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
