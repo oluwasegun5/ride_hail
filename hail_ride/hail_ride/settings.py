@@ -148,6 +148,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
