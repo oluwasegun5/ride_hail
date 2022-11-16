@@ -1,25 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
+
+from .managers import CustomUserManager
 
 
-# Create your models here.
 class User(AbstractUser):
-    email = models.EmailField(unique=True)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    # username = None
+    email = models.EmailField(_('email address'), unique=True)
 
+    UserNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.email
 
-
-class Review(models.Model):
-    rating = models.FloatField()
-    review = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(auto_now=True)
 
 class Card(models.Model):
     holder_name = models.CharField(max_length=50)
@@ -31,13 +28,11 @@ class Card(models.Model):
 
 class Rider(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    review = models.ForeignKey(Review,on_delete=models.CASCADE)
     phone = models.CharField(max_length=20)
     address = models.CharField(max_length=200)
 
 
 class Driver(models.Model):
-    review = models.ForeignKey(Review, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=20)
     home_address = models.CharField(max_length=200)
@@ -57,3 +52,11 @@ class Ride(models.Model):
     payment_method = models.CharField(max_length=10)
 
 
+class Review(models.Model):
+    ride = models.ForeignKey(Ride, on_delete=models.CASCADE)
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
+    rating = models.FloatField()
+    review = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

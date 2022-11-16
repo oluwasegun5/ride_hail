@@ -5,18 +5,9 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'first_name','last_name','email', )
+        fields = ('id', 'first_name', 'last_name', 'email',)
         extra_kwargs = {'password': {'write_only': True}}
-  
 
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = ('id',
-                  'review',
-                  'created_at',
-                  'updated_at',
-                  'deleted_at')
 
 class RiderSerializer(serializers.ModelSerializer):
     user = serializers.HyperlinkedRelatedField(
@@ -24,10 +15,9 @@ class RiderSerializer(serializers.ModelSerializer):
         view_name='user-detail'
     )
 
-    review = ReviewSerializer(many=True)
     class Meta:
         model = Rider
-        fields = ('user', 'review', 'phone', 'address')
+        fields = ('id','user', 'address', 'phone')
 
 
 class DriverSerializer(serializers.ModelSerializer):
@@ -35,22 +25,64 @@ class DriverSerializer(serializers.ModelSerializer):
         read_only=True,
         view_name='user-detail'
     )
-    review = ReviewSerializer(many=True)
 
     class Meta:
         model = Driver
-        fields = ('id', 'review', 'user', 'phone', 'current_address', 'home_address')
-        read_only_fields = ('re')
+        fields = ('user', 'phone', 'current_address', 'home_address')
+
 
 class RiderCreateSerializer(serializers.ModelSerializer):
-    review = ReviewSerializer(many=True)
     class Meta:
         model = Rider
-        fields = ('id', 'review', 'user', 'address', 'phone')
+        fields = ('user', 'address', 'phone')
 
 
 class DriverCreateSerializer(serializers.ModelSerializer):
-     review = ReviewSerializer(many=True)
-     class Meta:
+    class Meta:
         model = Driver
-        fields = ('id', 'review','user', 'phone','home_address','current_address', 'driver_license')
+        fields = ('user', 'current_address', 'phone')
+
+class RideCreateSerializer(serializers.ModelSerializer):
+    driver = DriverSerializer(many=True)
+    rider = RiderSerializer(many=True)
+    
+    class Meta:
+        model = Ride
+        fields=('driver',
+                'rider',
+                'start_time',
+                'start_location',
+                'end_location',
+                'fare',
+                'status',
+                'payment_method')
+
+class RideSerializer(serializers.ModelSerializer):
+    driver = DriverSerializer(many=True)
+    rider = RiderSerializer(many=True)
+    
+    class Meta:
+         model = Ride
+         fields=('id',
+                 'driver',
+                'rider',
+                'start_time',
+                'start_location',
+                'end_location',
+                'status')
+         
+class ReviewSerializer(serializers.ModelSerializer):
+    ride = RideSerializer(many=True)
+    rider = RiderSerializer(many=True)
+    driver= DriverSerializer(many=True)
+    
+    class Meta:
+        model = Review
+        fields = ('id',
+                  'ride',
+                  'rider',
+                  'driver',
+                  'rating',
+                  'review',
+                  'created_at',
+                  'updated_at')
