@@ -13,9 +13,9 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
+    permission_classes = [IsAdminUser]
 
     def create(self, request, *args, **kwargs):
-
         serializer = UserCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
