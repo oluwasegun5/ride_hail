@@ -12,7 +12,8 @@ from rest_framework import permissions
 
 
 class UserViewSet(ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(deactivate=False)
+
 
     def create(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
@@ -27,6 +28,12 @@ class UserViewSet(ModelViewSet):
         recipient_list = [self.request.data.get("email"), ]
         send_mail(subject, message, email_from, recipient_list)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.deactivate = True
+        user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -43,6 +50,11 @@ class UserViewSet(ModelViewSet):
 class RiderViewSet(ModelViewSet):
     queryset = Rider.objects.all()
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return RiderCreateSerializer
@@ -52,15 +64,54 @@ class RiderViewSet(ModelViewSet):
 class DriverViewSet(ModelViewSet):
     queryset = Driver.objects.all()
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return DriverCreateSerializer
         return DriverSerializer
 
-class ReviewViewSet(ModelViewSet):
-    queryset= Review.objects.all()
-    
+
+class CardViewSet(ModelViewSet):
+    queryset = Card.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return ReviewSerializer
+            return CardCreateSerializer
+        return CardSerializer
+
+
+class RideViewSet(ModelViewSet):
+    queryset = Ride.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return RideCreateSerializer
+        return RideSerializer
+
+
+class ReviewViewSet(ModelViewSet):
+    queryset = Review.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return ReviewCreateSerializer
         return ReviewSerializer
