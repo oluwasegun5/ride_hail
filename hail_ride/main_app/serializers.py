@@ -17,7 +17,7 @@ class RiderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rider
-        fields = ('user', 'address', 'phone')
+        fields = ('id','user', 'address', 'phone')
 
 
 class DriverSerializer(serializers.ModelSerializer):
@@ -100,3 +100,4 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ('driver', 'rider', 'rating', 'comment')
+

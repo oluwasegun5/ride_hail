@@ -6,10 +6,10 @@ from .managers import CustomUserManager
 
 
 class User(AbstractUser):
-    username = None
+    # username = None
     email = models.EmailField(_('email address'), unique=True)
     deactivate = models.BooleanField(default=False)
-    USERNAME_FIELD = 'email'
+    UserNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
