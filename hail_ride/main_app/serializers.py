@@ -17,7 +17,7 @@ class RiderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rider
-        fields = ('id','user', 'address', 'phone')
+        fields = ('id', 'user', 'address', 'phone')
 
 
 class DriverSerializer(serializers.ModelSerializer):
@@ -75,19 +75,13 @@ class ReviewSerializer(serializers.ModelSerializer):
 class RiderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rider
-        fields = ('user', 'address', 'phone')
+        fields = ('address', 'phone')
 
 
 class DriverCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Driver
         fields = ('user', 'current_address', 'phone')
-
-
-class CardCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Card
-        fields = ('rider', 'card_number', 'card_expiry_date', 'card_cvv', 'card_type')
 
 
 class RideCreateSerializer(serializers.ModelSerializer):
@@ -101,3 +95,8 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
         model = Review
         fields = ('driver', 'rider', 'rating', 'comment')
 
+
+class CardCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Card
+        fields = ('rider', 'card_type', 'card_number', 'card_holder_name', 'card_expiry_date', 'card_cvv')

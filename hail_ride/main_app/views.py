@@ -84,9 +84,9 @@ class CardViewSet(ModelViewSet):
         return [permissions.IsAdminUser()]
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return CardCreateSerializer
-        return CardSerializer
+        # if self.request.method == 'POST':
+        #     return CardCreateSerializer
+        return CardCreateSerializer
 
 
 class RideViewSet(ModelViewSet):
