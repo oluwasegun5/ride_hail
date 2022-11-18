@@ -6,7 +6,7 @@ from .managers import CustomUserManager
 
 
 class User(AbstractUser):
-    # username = None
+    username = None
     email = models.EmailField(_('email address'), unique=True)
     deactivate = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
@@ -15,7 +15,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return str(self.email)
 
 
 class Card(models.Model):
@@ -32,6 +32,8 @@ class Rider(models.Model):
     address = models.CharField(max_length=100, default='')
     phone = models.CharField(max_length=10, default=None)
 
+    def __str__(self):
+        return self.user
 
 
 class Driver(models.Model):
@@ -40,6 +42,9 @@ class Driver(models.Model):
     home_address = models.CharField(max_length=200)
     current_address = models.CharField(max_length=200)
     driver_license = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.user
 
 
 class Ride(models.Model):
@@ -53,7 +58,7 @@ class Ride(models.Model):
     status = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.driver
+        return f"{self.start_address} to {self.end_address}"
 
 
 class Review(models.Model):

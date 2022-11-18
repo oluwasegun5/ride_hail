@@ -14,7 +14,6 @@ from rest_framework import permissions
 class UserViewSet(ModelViewSet):
     queryset = User.objects.filter(deactivate=False)
 
-
     def create(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -39,12 +38,6 @@ class UserViewSet(ModelViewSet):
         if self.request.method == 'POST':
             return UserCreateSerializer
         return UserSerializer
-    
-    def get_permissions(self):
-        if self.request.method != 'POST':
-            return [permissions.IsAuthenticated()]
-        return [permissions.AllowAny()]
-            
 
 
 class RiderViewSet(ModelViewSet):
@@ -84,9 +77,9 @@ class CardViewSet(ModelViewSet):
         return [permissions.IsAdminUser()]
 
     def get_serializer_class(self):
-        # if self.request.method == 'POST':
-        #     return CardCreateSerializer
-        return CardCreateSerializer
+        if self.request.method == 'POST':
+            return CardCreateSerializer
+        return CardSerializer
 
 
 class RideViewSet(ModelViewSet):
