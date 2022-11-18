@@ -15,7 +15,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return str(self.email)
 
 
 class Card(models.Model):
@@ -58,7 +58,7 @@ class Ride(models.Model):
     status = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.driver
+        return f"{self.start_address} to {self.end_address}"
 
 
 class Review(models.Model):
