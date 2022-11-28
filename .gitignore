@@ -2,3 +2,5 @@
 venv/
 .env
 .idea/
+dbdata/
+__pycache__
